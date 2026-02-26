@@ -10,20 +10,21 @@ if [ -d "$ROOT_DIR" ]
 	loop="true"
 	
 	while [ "$loop" = "true" ]
-	
-		loading="..."
-		
-		echo "$loading"
-		
-		sleep 1
-		
-		echo "$loading:0:1"
-		
-		sleep 1
-		
-		echo "$loading:0:0"
-		
-		sleep 1
+		do
+			loading="..."
+			
+			echo "$loading"
+			
+			sleep 1
+			
+			echo "$loading:0:1"
+			
+			sleep 1
+			
+			echo "$loading:0:0"
+			
+			sleep 1
+		done
 	
 else
 	echo "You are not authorized."
