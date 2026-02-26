@@ -23,7 +23,7 @@ while [ "$loop" = "true" ]
 		
 		echo -ne "${loading:0:17}  \r"
 		
-		if ss -tuln | grep -q LISTEN;
+		if systemctl is-active --quiet apache2 || systemctl is-active --quiet nginx || systemctl is-active --quiet lighttpd;
 			then
 				echo "Working Server Found"
 		else
