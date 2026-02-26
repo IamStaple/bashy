@@ -68,7 +68,7 @@ while [ "$loop" = "true" ]
 					sleep 0.5
 					
 					sudo apt update
-					sudo apt install nginx
+					sudo apt install nginx -y
 			elif [ "$server_select" = "3" ]
 				then
 					sudo apt install lighttpd
