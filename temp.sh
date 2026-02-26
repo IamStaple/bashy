@@ -47,7 +47,7 @@ while [ "$loop" = "true" ]
 					loop="false"
 			elif [ "$server_select" = "2" ]
 				then
-					sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+					sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring -y
 					
 					sleep 0.5
 					
