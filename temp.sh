@@ -44,12 +44,35 @@ while [ "$loop" = "true" ]
 			if [ "$server_select" = "1" ]
 				then
 					sudo apt install apache2
+					loop="false"
 			elif [ "$server_select" = "2" ]
 				then
+					sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+					
+					sleep 0.5
+					
+					curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+					
+					sleep 0.5
+					
+					gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg
+					
+					sleep 0.5
+					
+					echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+					
+					sleep 0.5
+					
+					echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx
+					
+					sleep 0.5
+					
+					sudo apt update
 					sudo apt install nginx
 			elif [ "$server_select" = "3" ]
 				then
 					sudo apt install lighttpd
+					loop="false"
 			fi
 		fi
 	done
