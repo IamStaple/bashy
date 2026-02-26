@@ -7,7 +7,23 @@ if [ -d "$ROOT_DIR" ]
 	
 	echo "Welcome to System Builder!"
 	
+	loop="true"
 	
+	while [ "$loop" = "true" ]
+	
+		loading="..."
+		
+		echo "$loading"
+		
+		sleep 1
+		
+		echo "$loading:0:1"
+		
+		sleep 1
+		
+		echo "$loading:0:0"
+		
+		sleep 1
 	
 else
 	echo "You are not authorized."
