@@ -146,6 +146,7 @@ while [ "$loop" = "true" ]
 				sudo mkdir -p /var/www/html/nodejs/"$new_project"
 				echo "Created $new_project at nodejs directory"
 				echo "Running npm setup for Vite bundler..."
+				sudo npm install create-vite
 				sudo npm --prefix /var/www/html/nodejs/"$new_project" create vite@latest . -- --template react-ts --yes
 				
 				echo "Running vite build..."
