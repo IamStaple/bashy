@@ -153,7 +153,9 @@ while [ "$loop" = "true" ]
 				
 				cd /var/www/html/nodejs/"$new_project"
 				
-				sudo npm create vite@latest . -- --template react-ts --yes --no --no 
+				sudo npm create vite@latest . -- --template react-ts --yes
+				
+				sudo npm install
 				
 				echo "Running vite build..."
 				sudo npm run build
