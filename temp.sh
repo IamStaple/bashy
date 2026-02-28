@@ -120,6 +120,7 @@ while [ "$loop" = "true" ]
 				if ! dpkg -l | grep nodejs 
 					then
 						sudo apt install nodejs -y
+						sudo apt install npm -y
 						
 						if ! -d /var/www/html/nodejs 
 							then
@@ -139,9 +140,16 @@ while [ "$loop" = "true" ]
 				echo "Checking existing directory..."
 				sleep 2
 				echo ""
-				latest_folder=$(ls -d project* 2>/var/www/html/nodejs | sort -V | tail -n 1)
-				number=$(latest_folder#project)
-				next_num=$((number + 1))
+				latest_folder=$(ls -d /var/www/html/nodejs/project* 2>/dev/null | sort -V | tail -n 1)
+				
+				if [[ -z "$latest_folder" ]]
+					then
+						next_num=1
+				else
+					number=${latest_folder##*/project}
+					next_num=$((number + 1))
+				fi
+				
 				new_project="project$next_num"
 				
 				sudo mkdir /var/www/html/nodejs/"$new_project"
