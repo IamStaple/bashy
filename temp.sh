@@ -113,7 +113,8 @@ while [ "$loop" = "true" ]
 					then
 						sudo apt install nodejs -y
 						sudo apt install npm -y
-						sudo apt install 
+						sudo apt install -y curl ca-certificates gnupg
+						curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 				fi
 				
 				if [ ! -d /var/www/html/nodejs ] 
