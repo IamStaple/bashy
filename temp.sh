@@ -111,10 +111,13 @@ while [ "$loop" = "true" ]
 			then
 				if ! command -v npm >/dev/null 2>&1
 					then
-						sudo apt install nodejs -y
-						sudo apt install npm -y
+						sudo apt-get purge nodejs npm -y
+						sudo apt-get autoremove -y
+						
 						sudo apt install -y curl ca-certificates gnupg
 						curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+						sudo apt-get install -y nodejs
+						sudo apt install npm -y
 				fi
 				
 				if [ ! -d /var/www/html/nodejs ] 
