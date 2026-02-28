@@ -113,6 +113,7 @@ while [ "$loop" = "true" ]
 					then
 						sudo apt install nodejs -y
 						sudo apt install npm -y
+						sudo apt install 
 				fi
 				
 				if [ ! -d /var/www/html/nodejs ] 
@@ -146,11 +147,13 @@ while [ "$loop" = "true" ]
 				sudo mkdir -p /var/www/html/nodejs/"$new_project"
 				echo "Created $new_project at nodejs directory"
 				echo "Running npm setup for Vite bundler..."
+				
 				sudo npm install create-vite
+				sudo npm install -g typescript
 				
 				cd /var/www/html/nodejs/"$new_project"
 				
-				sudo npm create vite@latest . -- --template react-ts --yes
+				sudo npm create vite@latest . -- --template react-ts --yes --no --no 
 				
 				echo "Running vite build..."
 				sudo npm run build
