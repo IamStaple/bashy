@@ -117,14 +117,14 @@ while [ "$loop" = "true" ]
 		
 		if [ "$package_input" = "1" ]
 			then
-				if ! dpkg -l | grep nodejs 
+				if ! dpkg -l | grep -q nodejs 
 					then
 						sudo apt install nodejs -y
 						sudo apt install npm -y
 						
 						if [ ! -d /var/www/html/nodejs ] 
 							then
-								sudo mkdir /var/www/html/nodejs
+								sudo mkdir -p /var/www/html/nodejs
 								sudo touch /var/www/html/nodejs/index.js
 								echo ""
 								echo "Created a directory at /var/www/html"
@@ -155,7 +155,7 @@ while [ "$loop" = "true" ]
 				sudo mkdir /var/www/html/nodejs/"$new_project"
 				echo "Created $new_project at nodejs directory"
 				echo "Running npm setup for Vite bundler..."
-				sudo npm --prefix /var/www/html/"$new_project" create vite@latest . -- --template react-ts --yes
+				sudo npm --prefix /var/www/html/nodejs/"$new_project" create vite@latest . -- --template react-ts --yes
 				
 				echo "Running vite build..."
 				sudo npm --prefix /var/www/html/nodejs/"$new_project" run build
@@ -166,7 +166,7 @@ while [ "$loop" = "true" ]
 				
 		elif [ "$package_input" = "2" ]
 			then
-				if ! dpkg -l | grep python3
+				if ! dpkg -l | grep -q python3
 					then
 						sudo apt install python3-pip -y
 						sudo apt install python3-venv -y
@@ -187,4 +187,3 @@ while [ "$loop" = "true" ]
 				fi
 		fi
 	done
-
