@@ -180,7 +180,7 @@ EOF
 				
 				ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
 				
-				echo "Application can be found on $ipa/nodejs/$new_project/dist/"
+				echo "Application can be found on $ipa/nodejs/$new_project/"
 				
 		elif [ "$package_input" = "2" ]
 			then
