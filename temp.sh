@@ -122,7 +122,7 @@ while [ "$loop" = "true" ]
 						sudo apt install nodejs -y
 						sudo apt install npm -y
 						
-						if ! -d /var/www/html/nodejs 
+						if [ ! -d /var/www/html/nodejs ] 
 							then
 								sudo mkdir /var/www/html/nodejs
 								sudo touch /var/www/html/nodejs/index.js
@@ -171,7 +171,7 @@ while [ "$loop" = "true" ]
 						sudo apt install python3-pip -y
 						sudo apt install python3-venv -y
 						
-						if ! -d /var/www/html/python
+						if [ ! -d /var/www/html/python ]
 							then 
 								sudo mkdir /var/www/html/python
 								sudo touch /var/www/html/python/main.py
