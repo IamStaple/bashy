@@ -162,6 +162,16 @@ while [ "$loop" = "true" ]
 				sudo npm install
 				
 				echo "Running vite build..."
+				
+cat <<EOF > /var/www/html/nodejs/"$new_project"/vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/nodejs/$new_project/'
+})
+EOF
 				sudo npm run build
 				
 				cd dist
