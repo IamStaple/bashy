@@ -79,29 +79,21 @@ while [ "$loop" = "true" ]
 					sudo apt install lighttpd -y
 					loop="false"
 					
-				
 				package_loop="true"
 				
 				while [ "$package_loop" = "true" ]
 					do
 						echo "${package_loading:0:42}"
-						
 						sleep 0.5
-						
 						echo "${package_loading:0:43}"
-						
 						sleep 0.5
-						
 						echo "$package_loading"
-						
 						sleep 0.5
-						
 						package_loop="false"
 					done
-				
-				
 			fi
 		fi
+
 		echo ""
 		echo "Choose Your Preferred Package Manager: "
 		echo "1. Npm"
@@ -117,29 +109,28 @@ while [ "$loop" = "true" ]
 		
 		if [ "$package_input" = "1" ]
 			then
-				if ! dpkg -l | grep -q nodejs 
+				if ! command -v npm >/dev/null 2>&1
 					then
 						sudo apt install nodejs -y
 						sudo apt install npm -y
-						
-						if [ ! -d /var/www/html/nodejs ] 
-							then
-								sudo mkdir -p /var/www/html/nodejs
-								sudo touch /var/www/html/nodejs/index.js
-								echo ""
-								echo "Created a directory at /var/www/html"
-								echo "Directory Name: nodejs"
-								echo "Created index.js at nodejs directory"
-						fi
-						
-						echo "Package Installation Successful."
-				else 
-					echo "Package already installed. Installation Satisfied"
 				fi
+				
+				if [ ! -d /var/www/html/nodejs ] 
+					then
+						sudo mkdir -p /var/www/html/nodejs
+						sudo touch /var/www/html/nodejs/index.js
+						echo ""
+						echo "Created a directory at /var/www/html"
+						echo "Directory Name: nodejs"
+						echo "Created index.js at nodejs directory"
+				fi
+				
+				echo "Package Installation Successful."
 				
 				echo "Checking existing directory..."
 				sleep 2
 				echo ""
+				
 				latest_folder=$(ls -d /var/www/html/nodejs/project* 2>/dev/null | sort -V | tail -n 1)
 				
 				if [[ -z "$latest_folder" ]]
@@ -152,7 +143,7 @@ while [ "$loop" = "true" ]
 				
 				new_project="project$next_num"
 				
-				sudo mkdir /var/www/html/nodejs/"$new_project"
+				sudo mkdir -p /var/www/html/nodejs/"$new_project"
 				echo "Created $new_project at nodejs directory"
 				echo "Running npm setup for Vite bundler..."
 				sudo npm --prefix /var/www/html/nodejs/"$new_project" create vite@latest . -- --template react-ts --yes
