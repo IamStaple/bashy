@@ -117,11 +117,11 @@ while [ "$loop" = "true" ]
 		
 		if [ "$package_input" = "1" ]
 			then
-				if [ ! dpkg -l | grep nodejs ]
+				if ! dpkg -l | grep nodejs 
 					then
 						sudo apt install nodejs -y
 						
-						if [ ! -d /var/www/html/nodejs ]
+						if ! -d /var/www/html/nodejs 
 							then
 								sudo mkdir /var/www/html/nodejs
 								sudo touch /var/www/html/nodejs/index.js
@@ -158,12 +158,12 @@ while [ "$loop" = "true" ]
 				
 		elif [ "$package_input" = "2" ]
 			then
-				if [ ! dpkg -l | grep python3 ]
+				if ! dpkg -l | grep python3
 					then
 						sudo apt install python3-pip -y
 						sudo apt install python3-venv -y
 						
-						if [ ! -d /var/www/html/python ]
+						if ! -d /var/www/html/python
 							then 
 								sudo mkdir /var/www/html/python
 								sudo touch /var/www/html/python/main.py
