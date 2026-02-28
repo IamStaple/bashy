@@ -99,83 +99,84 @@ while [ "$loop" = "true" ]
 						package_loop="false"
 					done
 				
-				echo ""
-				echo "Choose Your Preferred Package Manager: "
-				echo "1. Npm"
-				echo "2. Pip"
 				
-				read -p "Enter Value: " package_input
-				
-				while [ "$package_input" != "1" ] && [ "$package_input" != "2" ]
-					do
-						echo "Invalid Input. Try Again."
-						read -p "Enter Value: " package_input
-					done
-				
-				if [ "$package_input" = "1" ]
-					then
-						if [ ! dpkg -l | grep nodejs ]
-							then
-								sudo apt install nodejs -y
-								
-								if [ ! -d /var/www/html/nodejs ]
-									then
-										sudo mkdir /var/www/html/nodejs
-										sudo touch /var/www/html/nodejs/index.js
-										echo ""
-										echo "Created a directory at /var/www/html"
-										echo "Directory Name: nodejs"
-										echo "Created index.js at nodejs directory"
-								fi
-								
-								echo "Package Installation Successful."
-						else 
-							echo "Package already installed. Installation Satisfied"
-						fi
-						
-						echo "Checking existing directory..."
-						sleep 2
-						echo ""
-						latest_folder=$(ls -d project* 2>/var/www/html/nodejs | sort -V | tail -n 1)
-						number=$(latest_folder#project)
-						next_num=$((number + 1))
-						new_project="project$next_num"
-						
-						sudo mkdir /var/www/html/nodejs/"$new_project"
-						echo "Created $new_project at nodejs directory"
-						echo "Running npm setup for Vite bundler..."
-						sudo npm --prefix /var/www/html/"$new_project" create vite@latest . -- --template react-ts --yes
-						
-						echo "Running vite build..."
-						sudo npm --prefix /var/www/html/nodejs/"$new_project" run build
-						
-						ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
-						
-						echo "Application can be found on $ipa/nodejs/$new_project/dist/"
-						
-				elif [ "$package_input" = "2" ]
-					then
-						if [ ! dpkg -l | grep python3 ]
-							then
-								sudo apt install python3-pip -y
-								sudo apt install python3-venv -y
-								
-								if [ ! -d /var/www/html/python ]
-									then 
-										sudo mkdir /var/www/html/python
-										sudo touch /var/www/html/python/main.py
-										echo ""
-										echo "Created a directory at /var/www/html"
-										echo "Directory name: python"
-										echo "Created main.py at python directory"
-								fi
-								
-								echo "Package Installation Successful"
-						else
-							echo "Package already installed. Installation Satisfied"
-						fi
-				fi
 			fi
+		fi
+		echo ""
+		echo "Choose Your Preferred Package Manager: "
+		echo "1. Npm"
+		echo "2. Pip"
+		
+		read -p "Enter Value: " package_input
+		
+		while [ "$package_input" != "1" ] && [ "$package_input" != "2" ]
+			do
+				echo "Invalid Input. Try Again."
+				read -p "Enter Value: " package_input
+			done
+		
+		if [ "$package_input" = "1" ]
+			then
+				if [ ! dpkg -l | grep nodejs ]
+					then
+						sudo apt install nodejs -y
+						
+						if [ ! -d /var/www/html/nodejs ]
+							then
+								sudo mkdir /var/www/html/nodejs
+								sudo touch /var/www/html/nodejs/index.js
+								echo ""
+								echo "Created a directory at /var/www/html"
+								echo "Directory Name: nodejs"
+								echo "Created index.js at nodejs directory"
+						fi
+						
+						echo "Package Installation Successful."
+				else 
+					echo "Package already installed. Installation Satisfied"
+				fi
+				
+				echo "Checking existing directory..."
+				sleep 2
+				echo ""
+				latest_folder=$(ls -d project* 2>/var/www/html/nodejs | sort -V | tail -n 1)
+				number=$(latest_folder#project)
+				next_num=$((number + 1))
+				new_project="project$next_num"
+				
+				sudo mkdir /var/www/html/nodejs/"$new_project"
+				echo "Created $new_project at nodejs directory"
+				echo "Running npm setup for Vite bundler..."
+				sudo npm --prefix /var/www/html/"$new_project" create vite@latest . -- --template react-ts --yes
+				
+				echo "Running vite build..."
+				sudo npm --prefix /var/www/html/nodejs/"$new_project" run build
+				
+				ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
+				
+				echo "Application can be found on $ipa/nodejs/$new_project/dist/"
+				
+		elif [ "$package_input" = "2" ]
+			then
+				if [ ! dpkg -l | grep python3 ]
+					then
+						sudo apt install python3-pip -y
+						sudo apt install python3-venv -y
+						
+						if [ ! -d /var/www/html/python ]
+							then 
+								sudo mkdir /var/www/html/python
+								sudo touch /var/www/html/python/main.py
+								echo ""
+								echo "Created a directory at /var/www/html"
+								echo "Directory name: python"
+								echo "Created main.py at python directory"
+						fi
+						
+						echo "Package Installation Successful"
+				else
+					echo "Package already installed. Installation Satisfied"
+				fi
 		fi
 	done
 
