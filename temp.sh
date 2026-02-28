@@ -147,10 +147,13 @@ while [ "$loop" = "true" ]
 				echo "Created $new_project at nodejs directory"
 				echo "Running npm setup for Vite bundler..."
 				sudo npm install create-vite
-				sudo npm --prefix /var/www/html/nodejs/"$new_project" create vite@latest . -- --template react-ts --yes
+				
+				cd /var/www/html/nodejs/"$new_project"
+				
+				sudo npm create vite@latest . -- --template react-ts --yes
 				
 				echo "Running vite build..."
-				sudo npm --prefix /var/www/html/nodejs/"$new_project" run build
+				sudo npm run build
 				
 				ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
 				
