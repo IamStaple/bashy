@@ -164,6 +164,8 @@ while [ "$loop" = "true" ]
 				echo "Running vite build..."
 				sudo npm run build
 				
+				sudo mv * ../ && sudo rm -rf dist
+				
 				ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
 				
 				echo "Application can be found on $ipa/nodejs/$new_project/dist/"
