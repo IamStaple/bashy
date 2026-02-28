@@ -5,28 +5,211 @@ ROOT_DIR="/root"
 if [ -d "$ROOT_DIR" ]
 	then
 	
-	echo "Welcome to System Builder!"
-	
+	echo "Welcome to Server Builder!"
+
+	echo ""
+
 	loop="true"
 	loading="Checking Sources..."
-	
+
+	package_loading="Checking available server package manager..."
+
 	while [ "$loop" = "true" ]
 		do
 			echo -ne "${loading:0:17}\r"
-			
-			sleep 1
+				
+			sleep 0.5
 			
 			echo -ne "${loading:0:18}\r"
 			
-			sleep 1
+			sleep 0.5
 			
 			echo -ne "$loading\r"
 			
-			sleep 1
+			sleep 0.5
 			
 			echo -ne "${loading:0:17}  \r"
+			
+			if systemctl is-active --quiet apache2 || systemctl is-active --quiet nginx || systemctl is-active --quiet lighttpd;
+				then
+					echo "Working Server Found"
+					break
+			else
+				echo "No Server Found."
+				echo "Start by adding one. Please select one of the options."
+				echo "1. Apache"
+				echo "2. Nginx"
+				echo "3. Lighttpd"
+				echo ""
+				read -p "Enter value: " server_select
+				
+				while [ "$server_select" != 1 ] && [ "$server_select" != 2 ] && [ "$server_select" != 3 ]
+					do
+						echo "Invalid Input. Try Again."
+						read -p "Enter value: " server_select
+					done
+					
+				if [ "$server_select" = "1" ]
+					then
+						sudo apt install apache2 -y
+						loop="false"
+				elif [ "$server_select" = "2" ]
+					then
+						sudo apt install curl gnupg2 ca-certificates lsb-release ubuntu-keyring -y
+						
+						sleep 0.5
+						
+						curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+						
+						sleep 0.5
+						
+						gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg
+						
+						sleep 0.5
+						
+						echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/ubuntu `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+						
+						sleep 0.5
+						
+						echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx
+						
+						sleep 0.5
+						
+						sudo apt update
+						sudo apt install nginx -y
+						
+						loop="false"
+				elif [ "$server_select" = "3" ]
+					then
+						sudo apt install lighttpd -y
+						loop="false"
+						
+					package_loop="true"
+					
+					while [ "$package_loop" = "true" ]
+						do
+							echo "${package_loading:0:42}"
+							sleep 0.5
+							echo "${package_loading:0:43}"
+							sleep 0.5
+							echo "$package_loading"
+							sleep 0.5
+							package_loop="false"
+						done
+				fi
+			fi
+
+			echo ""
+			echo "Choose Your Preferred Package Manager: "
+			echo "1. Npm"
+			echo "2. Pip"
+			
+			read -p "Enter Value: " package_input
+			
+			while [ "$package_input" != "1" ] && [ "$package_input" != "2" ]
+				do
+					echo "Invalid Input. Try Again."
+					read -p "Enter Value: " package_input
+				done
+			
+			if [ "$package_input" = "1" ]
+				then
+					if ! command -v npm >/dev/null 2>&1
+						then
+							sudo apt-get purge nodejs npm -y
+							sudo apt-get autoremove -y
+							
+							sudo apt install -y curl ca-certificates gnupg
+							curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+							sudo apt-get install -y nodejs
+							sudo apt install npm -y
+					fi
+					
+					if [ ! -d /var/www/html/nodejs ] 
+						then
+							sudo mkdir -p /var/www/html/nodejs
+							sudo touch /var/www/html/nodejs/index.js
+							echo ""
+							echo "Created a directory at /var/www/html"
+							echo "Directory Name: nodejs"
+							echo "Created index.js at nodejs directory"
+					fi
+					
+					echo "Package Installation Successful."
+					
+					echo "Checking existing directory..."
+					sleep 2
+					echo ""
+					
+					latest_folder=$(ls -d /var/www/html/nodejs/project* 2>/dev/null | sort -V | tail -n 1)
+					
+					if [[ -z "$latest_folder" ]]
+						then
+							next_num=1
+					else
+						number=${latest_folder##*/project}
+						next_num=$((number + 1))
+					fi
+					
+					new_project="project$next_num"
+					
+					sudo mkdir -p /var/www/html/nodejs/"$new_project"
+					echo "Created $new_project at nodejs directory"
+					echo "Running npm setup for Vite bundler..."
+					
+					sudo npm install create-vite
+					sudo npm install -g typescript
+					
+					cd /var/www/html/nodejs/"$new_project"
+					
+					sudo npm create vite@latest . -y -- --template react-ts
+					
+					sudo npm install
+					
+					echo "Running vite build..."
+					
+cat <<EOF > /var/www/html/nodejs/"$new_project"/vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/nodejs/$new_project/'
+})
+EOF
+					sudo npm run build
+					
+					cd dist
+					
+					sudo mv * ../ && cd ../ && sudo rm -rf dist
+					
+					ipa=$(ip a | grep 'inet 192.168' | awk '{print $2}' | cut -d/ -f1)
+					
+					echo "Application can be found on $ipa/nodejs/$new_project/"
+					
+			elif [ "$package_input" = "2" ]
+				then
+					if ! dpkg -l | grep -q python3
+						then
+							sudo apt install python3-pip -y
+							sudo apt install python3-venv -y
+							
+							if [ ! -d /var/www/html/python ]
+								then 
+									sudo mkdir /var/www/html/python
+									sudo touch /var/www/html/python/main.py
+									echo ""
+									echo "Created a directory at /var/www/html"
+									echo "Directory name: python"
+									echo "Created main.py at python directory"
+							fi
+							
+							echo "Package Installation Successful"
+					else
+						echo "Package already installed. Installation Satisfied"
+					fi
+			fi
 		done
-	
 else
 	echo "You are not authorized."
 fi
